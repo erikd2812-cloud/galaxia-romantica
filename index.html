@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080309">
+<meta name="description" content="Una galaxia romántica llena de estrellas y mensajes de amor.">
+<title>Una Galaxia de Amor</title>
+<style>
+:root{--pink:#ff4ca5;--hot:#ff168b;--soft:#ffc1e2;--bg:#050207}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:#fff;font-family:Georgia,'Times New Roman',serif}
+body{min-height:100svh;overscroll-behavior:none}
+#space{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:manipulation;z-index:3}
+.vignette{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 17%,rgba(0,0,0,.34) 72%,#030104 120%);z-index:1}
+.screen{position:fixed;inset:0;display:grid;place-items:center;padding:22px;transition:opacity .85s ease,transform .85s ease;z-index:5}
+.hidden{opacity:0!important;pointer-events:none!important;transform:scale(.96)!important}
+.intro-card,.memory-card{width:min(88vw,370px);padding:27px 22px 24px;text-align:center;border:1px solid rgba(255,127,190,.32);border-radius:19px;background:linear-gradient(145deg,rgba(36,5,22,.94),rgba(13,3,11,.97));box-shadow:0 0 38px rgba(255,33,143,.18),inset 0 0 28px rgba(255,65,157,.07);position:relative;backdrop-filter:blur(9px)}
+.intro-card:before,.memory-card:before{content:"";position:absolute;inset:7px;border:1px solid rgba(255,173,216,.12);border-radius:13px;pointer-events:none}
+h1{font-size:clamp(29px,7vw,39px);line-height:1.04;margin:0 0 15px;text-shadow:0 0 15px rgba(255,80,169,.58)}
+.doodle{font-size:43px;display:block;margin:10px 0 15px;filter:drop-shadow(0 0 11px #ff70b8)}
+.kicker{font:9px/1.6 Arial,sans-serif;letter-spacing:2.4px;color:#e8a2c5;text-transform:uppercase;margin:12px 0 17px}
+.action{font:700 10px Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#fff;border:1px solid rgba(255,220,240,.68);border-radius:30px;padding:13px 20px;background:linear-gradient(90deg,#a91b62,#f45ba5);box-shadow:0 0 19px rgba(255,44,148,.4);cursor:pointer;touch-action:manipulation}
+.action:active{transform:scale(.97)}
+#universe{position:fixed;inset:0;opacity:0;pointer-events:none;transition:opacity 1.2s;z-index:2}
+#universe.active{opacity:1;pointer-events:auto}
+.hud{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.heart{position:absolute;left:50%;top:42%;width:min(39vw,190px);aspect-ratio:1;transform:translate(-50%,-50%);filter:drop-shadow(0 0 13px #ff168b);animation:heartbeat 2.4s ease-in-out infinite}
+.heart svg{width:100%;height:100%;overflow:visible}
+@keyframes heartbeat{0%,100%{transform:translate(-50%,-50%) scale(1)}12%{transform:translate(-50%,-50%) scale(1.045)}24%{transform:translate(-50%,-50%) scale(1)}36%{transform:translate(-50%,-50%) scale(1.025)}}
+.ring{position:absolute;left:50%;top:43%;width:min(92vw,550px);aspect-ratio:1;border:1px solid rgba(255,55,156,.13);border-radius:50%;transform:translate(-50%,-50%) rotateX(72deg);box-shadow:0 0 25px rgba(255,34,145,.2),inset 0 0 24px rgba(255,34,145,.1);animation:spin 30s linear infinite}
+.ring:before,.ring:after{content:"";position:absolute;inset:10%;border:1px solid rgba(255,70,167,.19);border-radius:50%}
+.ring:after{inset:22%;border-color:rgba(255,70,167,.13)}
+@keyframes spin{to{transform:translate(-50%,-50%) rotateX(72deg) rotateZ(360deg)}}
+.orbit-text{position:absolute;left:50%;top:70%;width:94vw;transform:translateX(-50%);text-align:center;color:#ff8cc5;font:700 clamp(9px,2.4vw,13px) Arial,sans-serif;letter-spacing:2px;text-shadow:0 0 9px #ff168b;line-height:2.5;opacity:.9}
+.top-label{position:absolute;top:env(safe-area-inset-top,12px);left:0;right:0;text-align:center;padding:15px 10px;font:9px Arial,sans-serif;letter-spacing:3px;color:#d67aa8;pointer-events:none}
+#hint{position:absolute;bottom:calc(22px + env(safe-area-inset-bottom,0px));width:100%;text-align:center;font:9px Arial,sans-serif;color:rgba(255,190,220,.72);letter-spacing:1.6px;pointer-events:none;text-shadow:0 0 9px #ff168b}
+#memory{position:fixed;inset:0;display:grid;place-items:center;padding:18px;z-index:8;transition:opacity .55s ease,transform .55s ease}
+.memory-card{width:min(88vw,360px);max-height:min(86svh,690px);overflow:auto;padding:19px 19px 21px;animation:cardIn .65s cubic-bezier(.2,.8,.2,1) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(22px) scale(.88)}to{opacity:1;transform:translateY(0) scale(1)}}
+.memory-card h2{font-size:clamp(23px,6vw,29px);margin:12px 0 11px;color:#ffe0f0;text-shadow:0 0 12px rgba(255,57,157,.48)}
+.memory-image{width:100%;height:clamp(145px,34vh,220px);object-fit:cover;display:block;border-radius:12px;border:1px solid rgba(255,125,188,.35);margin:0 auto 13px;box-shadow:0 0 22px rgba(255,40,145,.2);background:radial-gradient(circle at 50% 45%,rgba(255,111,182,.34),rgba(10,3,12,.94) 70%)}
+.memory-card p{font:13px/1.7 Arial,sans-serif;color:#f6d3e4;margin:0 auto 17px;max-width:290px;white-space:pre-line}
+.close{background:transparent;border-color:rgba(255,180,215,.42);box-shadow:none}
+#burst{position:fixed;inset:0;z-index:7;pointer-events:none}
+@media(max-height:620px){.heart{top:39%;width:min(32vw,145px)}.ring{top:40%;width:min(75vw,390px)}.orbit-text{top:65%}.intro-card{padding:18px}.doodle{margin:4px}.memory-card{max-height:90svh;padding:14px}.memory-image{height:120px}.memory-card p{font-size:12px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:1ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<canvas id="space" aria-hidden="true"></canvas><canvas id="burst" aria-hidden="true"></canvas><div class="vignette"></div>
+<section id="intro" class="screen">
+ <div class="intro-card">
+  <h1>Una Galaxia<br>de Amor para Ti</h1>
+  <span class="doodle">♡</span>
+  <div class="kicker">Un universo entero cabe en lo que siento por ti</div>
+  <button class="action" id="enter">Entrar a nuestro universo</button>
+ </div>
+</section>
+<main id="universe" aria-label="Galaxia romántica interactiva">
+ <div class="top-label">NUESTRO PEQUEÑO UNIVERSO</div>
+ <div class="hud" aria-hidden="true">
+  <div class="ring"></div>
+  <div class="heart"><svg viewBox="0 0 200 180"><defs><filter id="glow"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M100 165 C82 145 12 96 12 53 C12 4 70 -4 100 38 C130 -4 188 4 188 53 C188 96 118 145 100 165Z" fill="none" stroke="#ff4ca5" stroke-width="3" stroke-dasharray="2 5" filter="url(#glow)"/><path d="M100 155 C80 134 25 93 25 56 C25 20 68 15 100 54 C132 15 175 20 175 56 C175 93 120 134 100 155Z" fill="none" stroke="#ff9bce" stroke-width="1.2" stroke-dasharray="1 4"/></svg></div>
+  <div class="orbit-text">ERES MAGIA · MI LUGAR FAVORITO · CONTIGO TODO BRILLA ·</div>
+ </div>
+ <div id="hint">TOCA UNA DE LAS ESTRELLAS MÁS BRILLANTES PARA DESCUBRIR UN MENSAJE</div>
+</main>
+<section id="memory" class="hidden" aria-live="polite" aria-modal="true" role="dialog">
+ <article class="memory-card">
+  <img class="memory-image" id="memoryImage" alt="Imagen romántica" src="">
+  <h2 id="memoryTitle"></h2>
+  <p id="memoryText"></p>
+  <button class="action close" id="back">Volver a la galaxia</button>
+ </article>
+</section>
+<script>
+(()=>{
+ const canvas=document.getElementById('space'),ctx=canvas.getContext('2d');
+ const burstCanvas=document.getElementById('burst'),bctx=burstCanvas.getContext('2d');
+ let w=0,h=0,dpr=1,stars=[],dust=[],nebula=[],special=[],particles=[],raf=0,started=false,opening=false,activeCard=-1,lastFrame=0;
+ const pink=['#ff4ca5','#ff8bc5','#ffc2e3','#e91e83','#ffffff'];
+ const cards=[
+  {title:'Mi lugar favorito',text:'No importa en qué rincón del mundo estés: hay una parte de mí que siempre encuentra el camino hacia ti. Eres ese lugar al que mi corazón quiere volver.',image:'https://images.unsplash.com/photo-1518199266791-5375a83190b7?auto=format&fit=crop&w=1000&q=85'},
+  {title:'La casualidad más bonita',text:'Entre tantas personas, tantos caminos y tantas estrellas, coincidir contigo se siente como la casualidad más bonita que pudo regalarme la vida.',image:'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1000&q=85'},
+  {title:'Aun en la distancia',text:'La distancia puede separar nuestros pasos, pero no cambia las pequeñas cosas que me acercan a ti: tu voz, tus mensajes y todo lo que despiertas en mí.',image:'https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1000&q=85'},
+  {title:'Mi pensamiento favorito',text:'A veces basta con recordar una conversación contigo para que un día común se vuelva especial. Sin darte cuenta, te has convertido en uno de mis pensamientos favoritos.',image:'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1000&q=85'},
+  {title:'Donde nace la calma',text:'Hay personas que llegan haciendo ruido y otras que, con solo existir, traen calma. Tú tienes esa forma tan tuya de hacer que todo parezca un poquito mejor.',image:'https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=1000&q=85'},
+  {title:'Un infinito contigo',text:'Si pudiera guardar un instante para siempre, elegiría uno sencillo: hablar contigo, escucharte y sentir que, por un momento, el universo está exactamente donde debe estar.',image:'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=85'},
+  {title:'Lo que no digo',text:'Hay sentimientos que no siempre caben en una frase. Por eso, cuando no encuentre las palabras, mira esta galaxia: cada destello guarda algo bonito que siento por ti.',image:'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=85'},
+  {title:'Mi pequeña eternidad',text:'No necesito promesas imposibles ni un cielo perfecto. Me basta con seguir descubriendo contigo esos momentos pequeños que terminan significándolo todo.',image:'https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1000&q=85'},
+  {title:'Siempre hay luz',text:'Incluso en los días más grises, pensar en ti enciende una luz tranquila. Gracias por esa manera tan especial de aparecer en mis pensamientos y cambiar el color del día.',image:'https://images.unsplash.com/photo-1494972308805-463bc619d34e?auto=format&fit=crop&w=1000&q=85'},
+  {title:'Tú, entre millones',text:'El universo está lleno de estrellas, pero mis ojos siempre terminan buscando la misma luz. Entre millones de posibilidades, qué bonito es que seas tú.',image:'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1000&q=85'}
+ ];
+ const rand=(a,b)=>Math.random()*(b-a)+a;
+ function resize(){dpr=Math.min(devicePixelRatio||1,1.25);w=innerWidth;h=innerHeight;for(const c of [canvas,burstCanvas]){c.width=w*dpr;c.height=h*dpr;c.style.width=w+'px';c.style.height=h+'px';}ctx.setTransform(dpr,0,0,dpr,0,0);bctx.setTransform(dpr,0,0,dpr,0,0);
+  stars=Array.from({length:Math.min(850,Math.floor(w*h/700))},()=>({x:Math.random()*w,y:Math.random()*h,r:rand(.25,1.45),a:rand(.2,.9),tw:rand(.003,.018),phase:rand(0,6.28),hue:Math.random()<.23?'#ffb8dd':'#e9e5ff'}));
+  dust=Array.from({length:220},()=>({a:rand(0,Math.PI*2),r:rand(.04,.49),size:rand(.35,1.8),phase:rand(0,6.28),speed:rand(-.006,.006)}));
+  // Polvo de nebulosa: partículas distribuidas en brazos espirales, no en círculos perfectos.
+  nebula=Array.from({length:260},()=>{const arm=Math.floor(Math.random()*4),u=Math.pow(Math.random(),.72),angle=arm*Math.PI/2+u* Math.PI*2.25+rand(-.22,.22);return{angle,r:.035+u*.47,width:rand(.012,.055),size:rand(.45,2.5),alpha:rand(.10,.48),phase:rand(0,6.28),speed:rand(-.00012,.00012),tone:Math.random()};});
+  const positions=[[.18,.28],[.79,.25],[.82,.55],[.22,.68],[.63,.78],[.42,.19],[.09,.48],[.91,.76],[.49,.88],[.67,.42]];
+  special=positions.map((p,i)=>({x:p[0]*w,y:p[1]*h,r:5.1+rand(0,1.4),phase:rand(0,6.28),index:i,pulse:rand(0,6.28)}));
+ }
+ function heartPoint(t){return{x:16*Math.pow(Math.sin(t),3),y:-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))};}
+ function drawStar(x,y,r,alpha,color,glow=0){ctx.globalAlpha=alpha;ctx.fillStyle=color;if(glow>0){ctx.shadowBlur=glow;ctx.shadowColor=color;}else{ctx.shadowBlur=0;}ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();if(r>2.7){ctx.globalAlpha=alpha*.7;ctx.strokeStyle=color;ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(x-r*2.8,y);ctx.lineTo(x+r*2.8,y);ctx.moveTo(x,y-r*2.8);ctx.lineTo(x,y+r*2.8);ctx.stroke();}ctx.shadowBlur=0;}
+ function draw(t){if(t-lastFrame<32){raf=requestAnimationFrame(draw);return;}lastFrame=t;if(activeCard!==-1){raf=requestAnimationFrame(draw);return;}ctx.clearRect(0,0,w,h);const cx=w/2,cy=h*.44;
+  const bg=ctx.createRadialGradient(cx,cy,2,cx,cy,Math.max(w,h)*.78);bg.addColorStop(0,'rgba(91,8,55,.25)');bg.addColorStop(.48,'rgba(34,8,40,.13)');bg.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=bg;ctx.fillRect(0,0,w,h);
+  // Nebulosa espiral rosa/violeta inspirada en la referencia: nubes, brazos y polvo luminoso.
+  ctx.save();ctx.globalCompositeOperation='screen';ctx.translate(cx,cy);ctx.rotate(t*.000012);
+  const nebSize=Math.min(w,h);
+  const core=ctx.createRadialGradient(0,0,2,0,0,nebSize*.34);
+  core.addColorStop(0,'rgba(255,190,248,.58)');core.addColorStop(.10,'rgba(255,65,202,.28)');core.addColorStop(.42,'rgba(191,35,210,.13)');core.addColorStop(1,'rgba(18,5,50,0)');
+  ctx.fillStyle=core;ctx.beginPath();ctx.ellipse(0,0,nebSize*.39,nebSize*.27,-.12,0,Math.PI*2);ctx.fill();
+  // Cuatro brazos difusos con bordes de gas magenta y violeta.
+  for(let arm=0;arm<4;arm++){
+   ctx.save();ctx.rotate(arm*Math.PI/2);
+   for(let layer=0;layer<3;layer++){
+    ctx.beginPath();for(let k=0;k<=48;k++){const u=k/48,r=nebSize*(.035+u*.46),a=.25+u* Math.PI*2.05;const x=Math.cos(a)*r,y=Math.sin(a)*r*.58;if(k===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);}
+    const grad=ctx.createLinearGradient(0,-nebSize*.25,0,nebSize*.25);
+    grad.addColorStop(0,'rgba(111,65,255,0)');grad.addColorStop(.35,layer===0?'rgba(166,64,255,.055)':'rgba(255,42,183,.035)');grad.addColorStop(.68,layer===1?'rgba(255,63,207,.12)':'rgba(145,68,255,.075)');grad.addColorStop(1,'rgba(111,65,255,0)');
+    ctx.strokeStyle=grad;ctx.lineWidth=nebSize*(.10+layer*.055);ctx.lineCap='round';ctx.shadowBlur=9;ctx.shadowColor=layer===1?'#d82cff':'#ff35bc';ctx.stroke();
+   }
+   ctx.restore();
+  }
+  // Granos luminosos siguiendo la espiral: movimiento lento y brillo variable.
+  for(const p of nebula){p.phase+=p.speed;const rr=p.r*nebSize,aa=p.angle+t*.000012*(p.tone>.5?1:-.7);const spread=Math.sin(p.phase)*p.width*nebSize;const x=Math.cos(aa)*rr+Math.cos(aa+1.5)*spread,y=Math.sin(aa)*rr*.58+Math.sin(aa+1.5)*spread*.62;const tw=.55+.45*Math.sin(t*.0008+p.phase)**2;ctx.globalAlpha=p.alpha*tw;ctx.fillStyle=p.tone<.28?'#8d70ff':p.tone<.68?'#e83bff':'#ff70d2';ctx.shadowBlur=0;ctx.beginPath();ctx.arc(x,y,p.size,0,Math.PI*2);ctx.fill();}
+  ctx.globalAlpha=1;ctx.shadowBlur=0;ctx.restore();
+  // Soft spiral nebula arms
+  /* Se elimina una capa redundante de brazos difusos: la nebulosa principal ya contiene ese volumen. */
+  for(const s of stars){s.phase+=s.tw;s.a=.35+.55*(.5+.5*Math.sin(s.phase));drawStar(s.x,s.y,s.r,s.a,s.hue,s.r>1.2?3:0);}
+  // Galaxy heart made of glowing particles
+  if(started){const scale=Math.min(w,h)*.0125;for(const p of dust){p.phase+=p.speed;const q=heartPoint(p.a),jitter=Math.sin(p.phase+t*.0003)*.045;const x=cx+(q.x+jitter)*scale*(.72+p.r*.35),y=cy+(q.y+jitter)*scale*(.72+p.r*.35);ctx.globalAlpha=.38+.55*Math.sin(t*.0012+p.phase)**2;ctx.fillStyle=pink[Math.floor((Math.abs(p.phase)*1.7)%pink.length)];ctx.shadowBlur=8;ctx.shadowColor='#ff168b';ctx.beginPath();ctx.arc(x,y,p.size,0,Math.PI*2);ctx.fill();}ctx.shadowBlur=0;ctx.globalAlpha=1;
+   for(let j=0;j<5;j++){ctx.beginPath();ctx.ellipse(cx,cy+Math.min(h*.19,120),Math.min(w*.43,230)*(1+j*.12),8+j*5,0,0,Math.PI*2);ctx.strokeStyle=`rgba(255,65,165,${.13-j*.017})`;ctx.lineWidth=1;ctx.shadowBlur=12;ctx.shadowColor='#ff168b';ctx.stroke();}ctx.shadowBlur=0;
+  }
+  // The ten message stars are brighter and larger than the natural star field.
+  for(const s of special){s.pulse+=.025;const pulse=1+Math.sin(s.pulse)*.13;drawStar(s.x,s.y,s.r*pulse,.98,'#fff0fa',17);ctx.save();ctx.strokeStyle='rgba(255,102,190,.65)';ctx.lineWidth=1;ctx.shadowBlur=13;ctx.shadowColor='#ff168b';ctx.beginPath();ctx.arc(s.x,s.y,s.r*2.15*pulse,0,Math.PI*2);ctx.stroke();ctx.restore();}
+  raf=requestAnimationFrame(draw);
+ }
+ function fitBurst(){bctx.clearRect(0,0,w,h);}
+ function heartParticle(x,y){const a=rand(0,Math.PI*2),speed=rand(1.1,5.2);return{x,y,vx:Math.cos(a)*speed,vy:Math.sin(a)*speed-1.1,life:1,decay:rand(.012,.024),size:rand(2,5),rot:rand(0,6.28),spin:rand(-.1,.1)};}
+ function heartShape(c,x,y,size,rot,alpha){c.save();c.translate(x,y);c.rotate(rot);c.globalAlpha=alpha;c.fillStyle='#ff4ca5';c.shadowBlur=15;c.shadowColor='#ff168b';c.beginPath();const s=size;c.moveTo(0,s*.35);c.bezierCurveTo(-s*1.25,-s*.35,-s*.55,-s*1.25,0,-s*.55);c.bezierCurveTo(s*.55,-s*1.25,s*1.25,-s*.35,0,s*.35);c.fill();c.restore();}
+ function burst(x,y){particles=Array.from({length:105},()=>heartParticle(x,y));let frame=0;function animate(){bctx.clearRect(0,0,w,h);particles=particles.filter(p=>p.life>0);for(const p of particles){p.x+=p.vx;p.y+=p.vy;p.vx*=.985;p.vy=p.vy*.985+.018;p.life-=p.decay;p.rot+=p.spin;heartShape(bctx,p.x,p.y,p.size,p.rot,p.life);}frame++;if(particles.length&&frame<105)requestAnimationFrame(animate);else bctx.clearRect(0,0,w,h);}animate();}
+ function openCard(index){if(opening||activeCard!==-1)return;opening=true;const s=special[index];burst(s.x,s.y);setTimeout(()=>{const c=cards[index];document.getElementById('memoryTitle').textContent=c.title;document.getElementById('memoryText').textContent=c.text;const img=document.getElementById('memoryImage');img.src=c.image;img.onerror=()=>{img.onerror=null;img.src='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"><defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#26051f"/><stop offset="1" stop-color="#a91b62"/></linearGradient></defs><rect width="800" height="450" fill="url(#g)"/><g fill="none" stroke="#ffc1e2" stroke-width="5" opacity=".8"><path d="M400 340C340 280 190 190 240 100c40-70 120-30 160 25 40-55 120-95 160-25 50 90-100 180-160 240Z"/></g><g fill="#fff" opacity=".8"><circle cx="120" cy="90" r="4"/><circle cx="650" cy="120" r="5"/><circle cx="570" cy="330" r="3"/></g></svg>');};document.getElementById('memory').classList.remove('hidden');activeCard=index;opening=false;},720);}
+ function closeCard(){document.getElementById('memory').classList.add('hidden');activeCard=-1;}
+ function start(){if(started)return;started=true;document.getElementById('intro').classList.add('hidden');document.getElementById('universe').classList.add('active');if(!raf)draw(0);}
+ function pointer(e){if(!started||activeCard!==-1||opening)return;const rect=canvas.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top;let hit=-1,dist=Infinity;for(const s of special){const d=Math.hypot(x-s.x,y-s.y);if(d<s.r*3.2&&d<dist){hit=s.index;dist=d;}}if(hit>=0)openCard(hit);}
+ document.getElementById('enter').addEventListener('click',start);document.getElementById('back').addEventListener('click',closeCard);canvas.addEventListener('pointerup',pointer);document.getElementById('memory').addEventListener('click',e=>{if(e.target.id==='memory')closeCard();});
+ addEventListener('resize',()=>{resize();fitBurst();},{passive:true});resize();draw(0);
+})();
+</script>
+</body>
+</html>
